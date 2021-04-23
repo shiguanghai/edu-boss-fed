@@ -1,3 +1,4 @@
+// 为 jsx 组件莫模板补充类型声明
 import Vue, { VNode } from 'vue'
 
 declare global {
