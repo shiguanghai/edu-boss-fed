@@ -3,33 +3,23 @@
     <h1>时光海</h1>
     <!-- 跟路由出口 -->
     <router-view/>
+
+    <p class="text">hello world</p>
   </div>
 </template>
 
-<script>
-function testable (target) {
-  target.isTestable = true
-}
+<script lang="ts">
+import Vue from 'vue'
 
-@testable
-class MyTestableClass {
-  // ...
-}
-
-console.log(MyTestableClass.isTestable) // true
+export default Vue.extend({
+  name: 'App'
+})
 </script>
 
-<!--<script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+<style lang="scss" scoped>
+// @import "~@/styles/variables.scss";
 
-@Component
-export default class App extends Vue {
-  a = 1
-  test () {
-    console.log(this.a)
-  }
+.text {
+  color: $success-color;
 }
-</script>-->
-
-<style lang="scss" scoped></style>
+</style>
