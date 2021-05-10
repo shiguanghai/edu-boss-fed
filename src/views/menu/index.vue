@@ -5,7 +5,7 @@
         <el-button @click="$router.push({ name: 'menu-create' })">添加菜单</el-button>
       </div>
       <el-table
-        :data="tableData"
+        :data="menus"
         style="width: 100%">
         <el-table-column
           label="编号"
@@ -18,24 +18,34 @@
           min-width="150">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="level"
           label="菜单级数"
           min-width="150">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="icon"
           label="前端图标"
           min-width="150">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="orderNum"
           label="排序"
           min-width="150">
         </el-table-column>
         <el-table-column
-          prop="name"
           label="操作"
           min-width="150">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.row)"
+            >编辑</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            >删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -44,28 +54,59 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {
+  getAllMenus,
+  deleteMenu
+} from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuIndex',
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      menus: [] // 菜单列表
+    }
+  },
+  created () {
+    this.loadAllMenus()
+  },
+  methods: {
+    async loadAllMenus () {
+      const { data } = await getAllMenus()
+      if (data.code === '000000') {
+        this.menus = data.data
+      }
+    },
+    handleEdit (item: any) {
+      // console.log('handleEdit')
+      this.$router.push({
+        name: 'menu-edit',
+        params: {
+          id: item.id
+        }
+      })
+    },
+    handleDelete (item: any) { // $index 遍历项索引，item 当前元素
+      // console.log('handleDelete: ', item)
+      this.$confirm('确认删除吗?', '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        // 请求删除操作
+        const { data } = await deleteMenu(item.id)
+        if (data.code === '000000') {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.loadAllMenus() // 更新数据列表
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 })
