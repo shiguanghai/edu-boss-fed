@@ -12,11 +12,15 @@
           <el-form-item label="资源分类">
             <el-select
               v-model="form.categoryId"
-              placeholder="请选择资源分类"
+              placeholder="全部"
               clearable
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="item in resourceCategories"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -87,6 +91,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getResourcePages } from '@/services/resource'
+import { getResourceCategories } from '@/services/resource-category'
 
 export default Vue.extend({
   name: 'ResourceList',
@@ -94,19 +99,25 @@ export default Vue.extend({
     return {
       resources: [], // 资源列表
       form: {
-        name: '',
-        url: '',
         current: 1, // 默认查询第1页数据
         size: 5, // 每页大小
-        categoryId: null // 资源分类
+        name: '',
+        url: '',
+        categoryId: null // 资源分类，null查询所有
       },
-      totalCount: 0
+      totalCount: 0,
+      resourceCategories: [] // 资源分类列表
     }
   },
   created () {
     this.loadResources()
+    this.loadResourceCategories()
   },
   methods: {
+    async loadResourceCategories () {
+      const { data } = await getResourceCategories()
+      this.resourceCategories = data.data
+    },
     async loadResources () {
       const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
