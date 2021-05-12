@@ -2,14 +2,14 @@
   <div class="resource-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form :inline="true" :model="form" label-width="80px">
-          <el-form-item label="资源名称">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item prop="name" label="资源名称">
             <el-input v-model="form.name" placeholder="资源名称"></el-input>
           </el-form-item>
-          <el-form-item label="资源路径">
+          <el-form-item prop="url" label="资源路径">
             <el-input v-model="form.url" placeholder="资源路径"></el-input>
           </el-form-item>
-          <el-form-item label="资源分类">
+          <el-form-item prop="categoryId" label="资源分类">
             <el-select
               v-model="form.categoryId"
               placeholder="全部"
@@ -24,13 +24,23 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询搜索</el-button>
+            <el-button
+              type="primary"
+              @click="onSubmit"
+              :disabled="isLoading"
+            >查询搜索</el-button>
+            <el-button
+              @click="onReset"
+              :disabled="isLoading"
+            >重置</el-button>
           </el-form-item>
         </el-form>
       </div>
       <el-table
         :data="resources"
-        style="width: 100%; margin-bottom: 20px">
+        style="width: 100%; margin-bottom: 20px"
+        v-loading="isLoading"
+      >
         <el-table-column
           type="index"
           label="编号"
@@ -82,7 +92,8 @@
         :page-sizes="[5, 10, 20]"
         :page-size="form.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount">
+        :total="totalCount"
+        :disabled="isLoading">
       </el-pagination>
     </el-card>
   </div>
@@ -92,6 +103,7 @@
 import Vue from 'vue'
 import { getResourcePages } from '@/services/resource'
 import { getResourceCategories } from '@/services/resource-category'
+import { Form } from 'element-ui'
 
 export default Vue.extend({
   name: 'ResourceList',
@@ -106,7 +118,8 @@ export default Vue.extend({
         categoryId: null // 资源分类，null查询所有
       },
       totalCount: 0,
-      resourceCategories: [] // 资源分类列表
+      resourceCategories: [], // 资源分类列表
+      isLoading: true // 加载状态
     }
   },
   created () {
@@ -119,9 +132,11 @@ export default Vue.extend({
       this.resourceCategories = data.data
     },
     async loadResources () {
+      this.isLoading = true // 展示加载中状态
       const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
       this.totalCount = data.data.total
+      this.isLoading = false // 关闭加载中状态
     },
     handleEdit (item: any) {
       console.log('handleEdit', item)
@@ -146,6 +161,11 @@ export default Vue.extend({
       // 请求获取对应页码的数据
       this.form.current = val // 修改要查询的页码
       this.loadResources() // 重绘列表数据
+    },
+    onReset () {
+      (this.$refs.form as Form).resetFields()
+      this.form.current = 1 // 重置回到第1页
+      this.loadResources()
     }
   }
 })
