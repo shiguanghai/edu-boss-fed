@@ -20,7 +20,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-button @click="dialogFormVisible = true">添加角色</el-button>
+      <el-button @click="dialogVisible = true">添加角色</el-button>
       <el-table
         :data="roles"
         style="width: 100%"
@@ -67,6 +67,17 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <!-- Dialog 需要设置visible属性，它接收Boolean，当为true时显示 Dialog -->
+    <el-dialog
+      title="添加角色"
+      :visible.sync="dialogVisible"
+      width="50%"
+    >
+      <create-or-edit
+        @success="onSuccess"
+        @cancel="dialogVisible = false"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -74,9 +85,13 @@
 import Vue from 'vue'
 import { getRoles, deleteRole } from '@/services/role'
 import { Form } from 'element-ui'
+import CreateOrEdit from './CreateOrEdit.vue'
 
 export default Vue.extend({
   name: 'RoleList',
+  components: {
+    CreateOrEdit
+  },
   data () {
     return {
       roles: [], // 角色列表
@@ -85,7 +100,8 @@ export default Vue.extend({
         size: 50,
         name: ''
       }, // 查询条件
-      loading: false
+      loading: false,
+      dialogVisible: false // 控制添加或者编辑角色的对话框显示或隐藏
     }
   },
 
@@ -123,6 +139,10 @@ export default Vue.extend({
     onReset () {
       (this.$refs.form as Form).resetFields()
       this.loadRoles()
+    },
+    onSuccess () {
+      this.dialogVisible = false // 关闭对话框
+      this.loadRoles() // 重新加载数据列表
     }
   }
 })
