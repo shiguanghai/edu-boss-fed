@@ -42,3 +42,22 @@ export const getMenuNodeList = () => {
     url: '/boss/menu/getMenuNodeList'
   })
 }
+
+export const allocateRoleMenus = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/menu/allocateRoleMenus',
+    data
+  })
+}
+
+export const getRoleMenus = (roleId: string | number) => {
+  return request({
+    method: 'GET',
+    url: '/boss/menu/getRoleMenus',
+    // url: `/boss/menu/getRoleMenus?roleId=${roleId}`,
+    params: { // axios 会把 params 转换为 key=value&key=value 的数据格式放到url后面（以？分割）
+      roleId
+    }
+  })
+}
