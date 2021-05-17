@@ -175,10 +175,10 @@ export default Vue.extend({
       this.users = data.data.records
       this.loading = false
     },
-    // async handleForbidUser (user: any) {
-    //   const { data } = await forbidUser(user.id)
-    //   console.log(data)
-    // },
+    async handleForbidUser (user: any) {
+      const { data } = await forbidUser(user.id)
+      console.log(data)
+    },
     handleQuery () {
       this.filterParams.currentPage = 1
       this.loadUsers()
@@ -199,7 +199,7 @@ export default Vue.extend({
       this.dialogVisible = true
     },
     async handleAllocRole () {
-      const { data } = await allocateUserRoles({
+      await allocateUserRoles({
         userId: (this.currentUser as any).id,
         roleIdList: this.roleIdList
       })
