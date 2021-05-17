@@ -1,40 +1,51 @@
 <template>
   <div class="resource-list">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item prop="name" label="资源名称">
-            <el-input v-model="form.name" placeholder="资源名称"></el-input>
-          </el-form-item>
-          <el-form-item prop="url" label="资源路径">
-            <el-input v-model="form.url" placeholder="资源路径"></el-input>
-          </el-form-item>
-          <el-form-item prop="categoryId" label="资源分类">
-            <el-select
-              v-model="form.categoryId"
-              placeholder="全部"
-              clearable
-            >
-              <el-option
-                v-for="item in resourceCategories"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              @click="onSubmit"
-              :disabled="isLoading"
-            >查询搜索</el-button>
-            <el-button
-              @click="onReset"
-              :disabled="isLoading"
-            >重置</el-button>
-          </el-form-item>
-        </el-form>
+      <div slot="header">
+        <span>数据筛选</span>
+      </div>
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="80px"
+        label-position="left"
+      >
+        <el-form-item prop="name" label="资源名称">
+          <el-input v-model="form.name" placeholder="资源名称"></el-input>
+        </el-form-item>
+        <el-form-item prop="url" label="资源路径">
+          <el-input v-model="form.url" placeholder="资源路径"></el-input>
+        </el-form-item>
+        <el-form-item prop="categoryId" label="资源分类">
+          <el-select
+            v-model="form.categoryId"
+            placeholder="全部"
+            clearable
+          >
+            <el-option
+              v-for="item in resourceCategories"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="onSubmit"
+            :disabled="isLoading"
+          >查询搜索</el-button>
+          <el-button
+            @click="onReset"
+            :disabled="isLoading"
+          >重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header">
+        <span>查询结果：</span>
       </div>
       <el-table
         :data="resources"
@@ -44,30 +55,30 @@
         <el-table-column
           type="index"
           label="编号"
-          width="100">
+          min-width="50">
         </el-table-column>
         <el-table-column
           prop="name"
           label="资源名称"
-          width="180">
+          min-width="180">
         </el-table-column>
         <el-table-column
           prop="url"
-          width="180"
+          min-width="200"
           label="资源路径">
         </el-table-column>
         <el-table-column
           prop="description"
-          width="180"
+          min-width="150"
           label="描述">
         </el-table-column>
         <el-table-column
-          width="180"
+          min-width="180"
           prop="createdTime"
           label="添加时间">
         </el-table-column>
         <el-table-column
-          width="180"
+          min-width="150"
           label="操作">
           <template slot-scope="scope">
             <el-button
@@ -112,7 +123,7 @@ export default Vue.extend({
       resources: [], // 资源列表
       form: {
         current: 1, // 默认查询第1页数据
-        size: 5, // 每页大小
+        size: 10, // 每页大小
         name: '',
         url: '',
         categoryId: null // 资源分类，null查询所有
@@ -171,4 +182,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.el-card {
+  margin-bottom: 20px;
+}
+</style>

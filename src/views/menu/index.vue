@@ -2,25 +2,28 @@
   <div class="menu">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-button @click="$router.push({ name: 'menu-create' })">添加菜单</el-button>
+        <el-button
+          @click="$router.push({ name: 'menu-create' })"
+          type="primary"
+        >添加菜单</el-button>
       </div>
       <el-table
         :data="menus"
         style="width: 100%">
         <el-table-column
           label="编号"
-          min-width="150"
+          min-width="50"
           type="index">
         </el-table-column>
         <el-table-column
           prop="name"
           label="菜单名称"
-          min-width="150">
+          min-width="180">
         </el-table-column>
         <el-table-column
           prop="level"
           label="菜单级数"
-          min-width="150">
+          min-width="100">
         </el-table-column>
         <el-table-column
           prop="icon"
@@ -30,11 +33,11 @@
         <el-table-column
           prop="orderNum"
           label="排序"
-          min-width="150">
+          min-width="100">
         </el-table-column>
         <el-table-column
           label="操作"
-          min-width="150">
+          min-width="180">
           <template slot-scope="scope">
             <el-button
               size="mini"

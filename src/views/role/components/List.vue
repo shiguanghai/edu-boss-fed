@@ -1,26 +1,41 @@
 <template>
   <div class="role-list">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <!-- <span>筛选搜索</span> -->
-        <el-form ref="form" :model="form">
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              @click="onSubmit"
-              :disabled="loading"
-            >查询搜索</el-button>
-            <el-button
-              :disabled="loading"
-              @click="onReset"
-            >重置</el-button>
-          </el-form-item>
-        </el-form>
+      <div slot="header">
+        <span>数据筛选</span>
       </div>
-      <el-button @click="handleAdd">添加角色</el-button>
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="80px"
+        label-position="left"
+      >
+        <el-form-item label="角色名称" prop="name">
+          <el-input v-model="form.name" placeholder="角色名称"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="onSubmit"
+            :disabled="loading"
+          >查询搜索</el-button>
+          <el-button
+            :disabled="loading"
+            @click="onReset"
+          >重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header">
+        <span>查询结果</span>
+        <el-button
+          @click="handleAdd"
+          style="float: right; margin-top: -10px"
+          type="primary"
+        >添加角色</el-button>
+      </div>
       <el-table
         :data="roles"
         style="width: 100%"
@@ -29,23 +44,27 @@
         <el-table-column
           prop="id"
           label="编号"
+          min-width="50"
         />
         <el-table-column
           prop="name"
           label="角色名称"
+          min-width="100"
         />
         <el-table-column
           prop="description"
           label="描述"
+          min-width="150"
         />
         <el-table-column
           prop="createdTime"
           label="添加时间"
+          min-width="180"
         />
         <el-table-column
           label="操作"
           align="center"
-          width="150px"
+          min-width="150"
         >
           <template slot-scope="scope">
             <div>
@@ -175,4 +194,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-card {
+  margin-bottom: 20px;
+}
+</style>
