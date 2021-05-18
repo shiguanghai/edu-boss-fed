@@ -74,7 +74,17 @@
           prop="status"
           label="上架状态"
           min-width="120">
-          123
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+              :disabled="scope.row.isStatusLoading"
+              @change="onStateChange(scope.row)"
+            />
+          </template>
         </el-table-column>
         <el-table-column
           prop="price"
@@ -102,7 +112,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getQueryCourses } from '@/services/course'
+import {
+  getQueryCourses,
+  changeState
+} from '@/services/course'
 import { Form } from 'element-ui'
 
 export default Vue.extend({
@@ -115,16 +128,14 @@ export default Vue.extend({
         courseName: '',
         status: ''
       },
-      courses: [],
+      courses: [], // 课程列表
       totalCount: 0,
       loading: true
     }
   },
-
   created () {
     this.loadCourses()
   },
-
   methods: {
     async loadCourses () {
       this.loading = true
@@ -136,21 +147,27 @@ export default Vue.extend({
       this.totalCount = data.data.total
       this.loading = false
     },
-
     handleCurrentChange (page: number) {
       this.filterParams.currentPage = page
       this.loadCourses()
     },
-
     handleFilter () {
       this.filterParams.currentPage = 1
       this.loadCourses()
     },
-
     handleReset () {
       (this.$refs.form as Form).resetFields()
       this.filterParams.currentPage = 1
       this.loadCourses()
+    },
+    async onStateChange (course: any) {
+      course.isStatusLoading = true
+      await changeState({
+        courseId: course.id,
+        status: course.status
+      })
+      this.$message.success(`${course.status === 0 ? '下架' : '上架'}成功`)
+      course.isStatusLoading = false
     }
   }
 })
