@@ -43,6 +43,9 @@
         <el-button
           style="float: right; margin-top: -10px"
           type="primary"
+          @click="$router.push({
+            name: 'course-create'
+          })"
         >添加课程</el-button>
       </div>
       <el-table
