@@ -68,22 +68,22 @@
         </div>
         <div v-show="activeStep === 2">
           <el-form-item label="售卖价格">
-            <el-input type="number">
+            <el-input v-model.number="course.discounts" type="number">
               <template slot="append">元</template>
             </el-input>
           </el-form-item>
           <el-form-item label="商品原价">
-            <el-input type="number">
+            <el-input v-model.number="course.price" type="number">
               <template slot="append">元</template>
             </el-input>
           </el-form-item>
           <el-form-item label="销量">
-            <el-input type="number">
+            <el-input v-model.number="course.sales" type="number">
               <template slot="append">单</template>
             </el-input>
           </el-form-item>
           <el-form-item label="活动标签">
-            <el-input></el-input>
+            <el-input v-model="course.discountsTag"></el-input>
           </el-form-item>
         </div>
         <div v-show="activeStep === 3">
@@ -98,6 +98,7 @@
           <template v-if="isSeckill">
             <el-form-item label="开始时间">
               <el-date-picker
+                v-model="course.activityCourseDTO.beginTime"
                 type="date"
                 placeholder="选择日期时间"
                 value-format="yyyy-MM-dd"
@@ -105,18 +106,19 @@
             </el-form-item>
             <el-form-item label="结束时间">
               <el-date-picker
+                v-model="course.activityCourseDTO.endTime"
                 type="date"
                 placeholder="选择日期时间"
                 value-format="yyyy-MM-dd"
               />
             </el-form-item>
             <el-form-item label="秒杀价">
-              <el-input type="number">
+              <el-input v-model.number="course.activityCourseDTO.amount" type="number">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
             <el-form-item label="秒杀库存">
-              <el-input type="number">
+              <el-input v-model.number="course.activityCourseDTO.stock" type="number">
                 <template slot="append">个</template>
               </el-input>
             </el-form-item>
@@ -124,11 +126,25 @@
         </div>
         <div v-show="activeStep === 4">
         <el-form-item label="课程详情">
-          <el-input type="textarea"></el-input>
+          <text-editor v-model="course.courseDescriptionMarkDown" />
+          <!-- <el-input v-model="course.courseDescriptionMarkDown" type="textarea"></el-input> -->
         </el-form-item>
-          <el-form-item>
-            <el-button type="primary">保存</el-button>
-          </el-form-item>
+        <el-form-item label="是否发布">
+          <el-switch
+            v-model="course.status"
+            :active-value="1"
+            :inactive-value="0"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="handleSave"
+          >保存</el-button>
+        </el-form-item>
         </div>
         <el-form-item v-if="activeStep >= 0 && activeStep < 4">
           <el-button @click="activeStep++">下一步</el-button>
@@ -144,15 +160,17 @@ import {
   saveOrUpdateCourse
 } from '@/services/course'
 import CourseImage from './components/CourseImage.vue'
+import TextEditor from '@/components/TextEditor/index.vue'
 
 export default Vue.extend({
   name: 'CourseCreate',
   components: {
-    CourseImage
+    CourseImage,
+    TextEditor
   },
   data () {
     return {
-      activeStep: 1,
+      activeStep: 0,
       steps: [
         { title: '基本信息' },
         { title: '课程封面' },
@@ -201,7 +219,17 @@ export default Vue.extend({
       }
     }
   },
-  methods: {}
+  methods: {
+    async handleSave () {
+      const { data } = await saveOrUpdateCourse(this.course)
+      if (data.code === '000000') {
+        this.$message.success('保存成功')
+        this.$router.push('/course')
+      } else {
+        this.$message.error('保存失败')
+      }
+    }
+  }
 })
 </script>
 
