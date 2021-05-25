@@ -28,11 +28,10 @@
     </el-card>
 
     <el-card class="box-card">
-      <div slot="header">
+      <div slot="header" class="card-header">
         <span>查询结果</span>
         <el-button
           @click="handleAdd"
-          style="float: right; margin-top: -10px"
           type="primary"
         >添加角色</el-button>
       </div>
@@ -195,6 +194,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .el-card {
   margin-bottom: 20px;
 }

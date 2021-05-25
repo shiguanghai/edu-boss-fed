@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
+      <div slot="header" class="card-header">
         <el-button
           @click="$router.push({ name: 'menu-create' })"
           type="primary"
@@ -115,4 +115,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>

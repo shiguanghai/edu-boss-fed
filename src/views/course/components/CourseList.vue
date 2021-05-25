@@ -38,10 +38,9 @@
     </el-card>
 
     <el-card class="box-card">
-      <div slot="header">
+      <div class="card-header" slot="header">
         <span>查询结果：</span>
         <el-button
-          style="float: right; margin-top: -10px"
           type="primary"
           @click="$router.push({
             name: 'course-create'
@@ -191,6 +190,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .el-card {
   margin-bottom: 20px;
 }

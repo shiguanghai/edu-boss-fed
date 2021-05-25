@@ -13,3 +13,21 @@ export const getSectionAndLesson = (courseId: string | number) => {
     }
   })
 }
+
+export const saveOrUpdateSection = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/course/section/saveOrUpdateSection',
+    data
+  })
+}
+
+export const getSectionById = (sectionId: string | number) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/section/getBySectionId',
+    params: {
+      sectionId
+    }
+  })
+}
