@@ -18,7 +18,7 @@
           <span>{{ node.label }}</span>
           <!-- section -->
           <span v-if="data.sectionName" class="actions">
-            <el-button>编辑</el-button>
+            <el-button @click.stop="handleShowEditSection(data)">编辑</el-button>
             <el-button>添加课时</el-button>
             <el-button>状态</el-button>
           </span>
@@ -35,7 +35,7 @@
 
     <!-- 添加阶段 -->
     <el-dialog
-      title="添加课程阶段"
+      :title="isEditSection ? '编辑课程阶段' : '添加课程阶段'"
       :visible.sync="isAddSectionShow"
     >
       <el-form ref="section-form" :model="section" label-width="70px">
@@ -70,7 +70,8 @@
 import Vue from 'vue'
 import {
   getSectionAndLesson,
-  saveOrUpdateSection
+  saveOrUpdateSection,
+  getSectionById
 } from '@/services/course-section'
 import { getCourseById } from '@/services/course'
 import { Form } from 'element-ui'
@@ -103,7 +104,8 @@ export default Vue.extend({
       sections: [],
       defaultProps,
       isAddSectionShow: false,
-      section
+      section,
+      isEditSection: false
     }
   },
   created () {
@@ -127,6 +129,7 @@ export default Vue.extend({
         orderNum: 0,
         status: 0
       }
+      this.isEditSection = false
       this.isAddSectionShow = true
     },
     async handleAddSection () {
@@ -135,6 +138,12 @@ export default Vue.extend({
       this.isAddSectionShow = false
       ;(this.$refs['section-form'] as Form).resetFields() // 表单重置
       this.$message.success('操作成功')
+    },
+    async handleShowEditSection (section: any) {
+      const { data } = await getSectionById(section.id)
+      this.section = data.data
+      this.isEditSection = true
+      this.isAddSectionShow = true
     }
   }
 })
