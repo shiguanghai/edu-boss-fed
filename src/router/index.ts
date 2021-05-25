@@ -91,6 +91,12 @@ const routes: Array<RouteConfig> = [
         name: 'course-edit',
         component: () => import(/* webpackChunkName: 'course-edit' */ '@/views/course/edit.vue'),
         props: true // 将路由路径参数映射到组件的 props 数据中
+      },
+      {
+        path: '/course/:courseId/section',
+        name: 'course-section',
+        component: () => import(/* webpackChunkName: 'course-section' */ '@/views/course/section.vue'),
+        props: true // 将路由路径参数映射到组件的 props 数据中
       }
     ]
   },
