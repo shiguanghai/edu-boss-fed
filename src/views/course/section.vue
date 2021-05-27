@@ -23,13 +23,31 @@
               type="primary"
               @click.stop="handleShowAddLesson(data)"
             >添加课时</el-button>
-            <el-button>状态</el-button>
+            <el-select
+              class="select-status"
+              v-model="data.status"
+              placeholder="请选择"
+              @change="handleSectionStatusChange(data)"
+            >
+              <el-option label="已隐藏" :value="0" />
+              <el-option label="待更新" :value="1" />
+              <el-option label="已更新" :value="2" />
+            </el-select>
           </span>
           <!-- lession -->
           <span v-else class="actions">
             <el-button @click="handleShowEditLesson(data, node.parent.data)">编辑</el-button>
-            <el-button>上传视频</el-button>
-            <el-button>状态</el-button>
+            <el-button type="success">上传视频</el-button>
+            <el-select
+              class="select-status"
+              v-model="data.status"
+              placeholder="请选择"
+              @change="handleLessonStatusChange(data)"
+            >
+              <el-option label="已隐藏" :value="0" />
+              <el-option label="待更新" :value="1" />
+              <el-option label="已更新" :value="2" />
+            </el-select>
           </span>
         </div>
       </el-tree>
@@ -200,7 +218,14 @@ export default Vue.extend({
       this.isEditSection = true
       this.isAddSectionShow = true
     },
-
+    async handleSectionStatusChange (section: any) {
+      await saveOrUpdateSection(section)
+      this.$message.success('操作成功')
+    },
+    async handleLessonStatusChange (lesson: any) {
+      await saveOrUpdateLesson(lesson)
+      this.$message.success('操作成功')
+    },
     handleShowAddLesson (data: any) {
       this.lesson = {
         sectionName: data.sectionName,
@@ -247,5 +272,9 @@ export default Vue.extend({
 }
 ::v-deep .el-tree-node__content {
   height: auto;
+}
+.select-status {
+  max-width: 100px;
+  margin-left: 8px;
 }
 </style>
