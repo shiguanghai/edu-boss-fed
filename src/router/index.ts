@@ -101,7 +101,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/course/:courseId/video',
         name: 'course-video',
-        component: () => import(/* webpackChunkName: 'course-video' */ '@/views/course/video-demo.vue'),
+        component: () => import(/* webpackChunkName: 'course-video' */ '@/views/course/video.vue'),
         props: true // 将路由路径参数映射到组件的 props 数据中
       }
     ]
