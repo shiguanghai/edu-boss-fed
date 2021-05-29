@@ -12,12 +12,12 @@ export const saveOrUpdateLesson = (data: any) => {
   })
 }
 
-// export const getLessonById = (lessonId: string | number) => {
-//   return request({
-//     method: 'GET',
-//     url: '/boss/course/lesson/getById',
-//     params: {
-//       lessonId
-//     }
-//   })
-// }
+export const getLessonById = (lessonId: any) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/lesson/getById',
+    params: {
+      lessonId
+    }
+  })
+}

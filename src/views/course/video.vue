@@ -2,9 +2,9 @@
   <div class="container">
     <el-card>
       <div slot="header">
-        <div>课程：xxx</div>
-        <div>阶段：xxx</div>
-        <div>课时：xxx</div>
+        <div>课程：{{ courseName }}</div>
+        <div>阶段：{{ sectionName }}</div>
+        <div>课时：{{ lessonName }}</div>
       </div>
       <el-form label-width="80px">
         <el-form-item label="视频上传">
@@ -16,6 +16,12 @@
         <el-form-item>
           <el-button type="primary" @click="handleUpload">开始上传</el-button>
           <el-button @click="$router.back()">返回</el-button>
+        </el-form-item>
+        <el-form-item>
+          <p>视频上传中：{{ uploadPercent }}%</p>
+          <p
+            v-if="isUploadSuccess"
+          >视频转码中：{{ isTransCodeSuccess ? '完成' : '正在处理，请稍后'}}</p>
         </el-form-item>
       </el-form>
     </el-card>
@@ -30,6 +36,9 @@ import {
   aliyunTransCode,
   getAliyunTransCodePercent
 } from '@/services/aliyun-upload'
+import { getLessonById } from '@/services/course-lesson'
+import { getSectionById } from '@/services/course-section'
+import { getCourseById } from '@/services/course'
 
 export default Vue.extend({
   name: 'CourseVideo',
@@ -37,7 +46,13 @@ export default Vue.extend({
     return {
       uploader: null,
       imageURL: '',
-      videoId: null
+      videoId: null,
+      uploadPercent: 0,
+      isUploadSuccess: false,
+      isTransCodeSuccess: false,
+      lessonName: null,
+      sectionName: null,
+      courseName: null
     }
   },
   computed: {
@@ -50,8 +65,17 @@ export default Vue.extend({
   },
   created () {
     this.initUploader()
+    this.loadHeadTitle()
   },
   methods: {
+    async loadHeadTitle () {
+      const { data } = await getLessonById(this.$route.query.lessonId)
+      this.lessonName = data.data.theme
+      const section = await getSectionById(data.data.sectionId)
+      this.sectionName = section.data.data.sectionName
+      const course = await getCourseById(data.data.courseId)
+      this.courseName = course.data.data.courseName
+    },
     initUploader () {
       this.uploader = new window.AliyunUpload.Vod({
         // 阿里账号ID，必须有值
@@ -104,12 +128,15 @@ export default Vue.extend({
           console.log('onUploadFailed', uploadInfo, code, message)
         },
         // 文件上传进度，单位：字节
-        onUploadProgress: function (
+        onUploadProgress: (
           uploadInfo: any,
           totalSize: any,
           loadedPercent: any
-        ) {
+        ) => {
           console.log('onUploadProgress', uploadInfo, totalSize, loadedPercent)
+          if (!uploadInfo.isImage) {
+            this.uploadPercent = Math.floor(loadedPercent * 100)
+          }
         },
         // 上传凭证或STS token超时
         onUploadTokenExpired: function (uploadInfo: any) {
@@ -118,6 +145,7 @@ export default Vue.extend({
         // 全部文件上传结束
         onUploadEnd: async (uploadInfo: any) => {
           console.log('onUploadEnd', uploadInfo)
+          this.isUploadSuccess = true
           // 请求转码
           const { data } = await aliyunTransCode({
             lessonId: this.$route.query.lessonId,
@@ -131,6 +159,7 @@ export default Vue.extend({
             const { data } = await getAliyunTransCodePercent(this.$route.query.lessonId)
             console.log(data.data)
             if (data.data === 100) {
+              this.isTransCodeSuccess = true
               window.clearInterval(timer)
               console.log('转码成功')
             }
@@ -139,6 +168,10 @@ export default Vue.extend({
       })
     },
     handleUpload () {
+      // 初始化上传状态
+      this.isUploadSuccess = false
+      this.isTransCodeSuccess = false
+      this.uploadPercent = 0
       // 获取上传的文件
       const imageFile = (this.image as any).files[0]
       const videoFile = (this.video as any).files[0]
