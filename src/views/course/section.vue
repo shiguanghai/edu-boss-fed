@@ -45,6 +45,9 @@
                 name: 'course-video',
                 params: {
                   courseId
+                },
+                query: {
+                  lessonId: data.id
                 }
               })"
             >上传视频</el-button>

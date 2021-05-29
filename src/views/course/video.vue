@@ -24,12 +24,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {
+  getAliyunVideoUploadAddressAdnAuth,
+  getAliyunImagUploadAddressAdnAuth,
+  aliyunTransCode,
+  getAliyunTransCodePercent
+} from '@/services/aliyun-upload'
 
 export default Vue.extend({
   name: 'CourseVideo',
   data () {
     return {
-      uploader: null
+      uploader: null,
+      imageURL: '',
+      videoId: null
     }
   },
   computed: {
@@ -59,13 +67,33 @@ export default Vue.extend({
         // 网络原因失败时，重新上传间隔时间，默认为2秒
         retryDuration: 2,
         // 开始上传
-        onUploadstarted: function (uploadInfo: any) {
+        onUploadstarted: async (uploadInfo: any) => {
           console.log('onUploadstarted', uploadInfo)
-
           // 1. 通过我们的后端获取上传凭证
+          let uploadAddressAndAuth
+          if (uploadInfo.isImage) {
+            // 获取图片上传凭证
+            const { data } = await getAliyunImagUploadAddressAdnAuth()
+            uploadAddressAndAuth = data.data
+            this.imageURL = uploadAddressAndAuth.imageURL
+          } else {
+            // 获取视频上传凭证
+            const { data } = await getAliyunVideoUploadAddressAdnAuth({
+              fileName: uploadInfo.file.name,
+              imageUrl: this.imageURL // 请确保一定是先上传图片
+            })
+            uploadAddressAndAuth = data.data
+            this.videoId = uploadAddressAndAuth.videoId
+          }
           // 2. 调用 uploader.setUploadAuthAndAddress 设置上传凭证
+          (this.uploader as any).setUploadAuthAndAddress(
+            uploadInfo,
+            uploadAddressAndAuth.uploadAuth,
+            uploadAddressAndAuth.uploadAddress,
+            uploadAddressAndAuth.imageId || uploadAddressAndAuth.videoId
+          )
           // 3. 设置好上传凭证确认没有问题，上传进度开始
-          // setUploadAuthAndAddress(uploadFileInfo, uploadAuth, uploadAddress,videoId)
+          // setUploadAuthAndAddress(uploadFileInfo, uploadAuth, uploadAddress, videoId)
         },
         // 文件上传成功
         onUploadSucceed: function (uploadInfo: any) {
@@ -88,21 +116,38 @@ export default Vue.extend({
           console.log('onUploadTokenExpired', uploadInfo)
         },
         // 全部文件上传结束
-        onUploadEnd: function (uploadInfo: any) {
+        onUploadEnd: async (uploadInfo: any) => {
           console.log('onUploadEnd', uploadInfo)
+          // 请求转码
+          const { data } = await aliyunTransCode({
+            lessonId: this.$route.query.lessonId,
+            coverImageUrl: this.imageURL,
+            fileName: (this.video as any).files[0].name, // 文件名
+            fileId: this.videoId // 视频Id
+          })
+          console.log(data)
+          // 轮询查询转码进度
+          const timer = setInterval(async () => {
+            const { data } = await getAliyunTransCodePercent(this.$route.query.lessonId)
+            console.log(data.data)
+            if (data.data === 100) {
+              window.clearInterval(timer)
+              console.log('转码成功')
+            }
+          }, 3000)
         }
       })
     },
     handleUpload () {
       // 获取上传的文件
-      const videoFile = (this.video as any).files[0]
       const imageFile = (this.image as any).files[0]
+      const videoFile = (this.video as any).files[0]
       const uploader = this.uploader as any
 
       // 将用户所选的文件添加到上传列表中
       // 一旦开始上传，它就会按照列表中添加的顺序开始上传
-      uploader.addFile(videoFile, null, null, null, '{"Vod":{}}')
       uploader.addFile(imageFile, null, null, null, '{"Vod":{}}')
+      uploader.addFile(videoFile, null, null, null, '{"Vod":{}}')
 
       // 开始上传，触发 onUploadstarted 事件
       uploader.startUpload()
