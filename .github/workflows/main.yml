@@ -60,5 +60,5 @@ jobs:
           cd /root/edu-boss-fed
           wget https://github.com/shiguanghai/edu-boss-fed/releases/latest/download/release.tgz -O release.tgz
           tar zxvf release.tgz
-          npm install --production
+          npm install
           pm2 reload pm2.config.json
