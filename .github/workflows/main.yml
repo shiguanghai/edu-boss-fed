@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-node@master
     - run: npm install
     - run: npm run build
-    - run: tar -zcvf release.tgz dist test-serve package.json package-lock.json 
+    - run: tar -zcvf release.tgz dist pm2.config.json test-serve package.json package-lock.json 
 
     # 发布 Release
     - name: Create Release
