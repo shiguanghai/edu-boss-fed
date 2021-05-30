@@ -2,8 +2,8 @@
   "apps": [
     {
       "name": "EduBossFed",
-      "script": "npm",
-      "args": "preview"
+      "script": "node",
+      "args": "test-serve/app.js"
     }
   ]
 }
