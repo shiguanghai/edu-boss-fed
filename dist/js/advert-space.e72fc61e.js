@@ -1,2 +1,0 @@
-(window.webpackJsonp = window.webpackJsonp || []).push([['advert-space'], { caea: function (e, a, t) { 'use strict'; t.r(a); var c = function () { var e = this; var a = e.$createElement; var t = e._self._c || a; return t('div', { staticClass: 'advert-space' }, [e._v('广告位管理')]) }; var n = []; var s = t('2b0e'); var d = s.default.extend({ name: 'AdvertSpaceIndex' }); var r = d; var l = t('2877'); var p = Object(l.a)(r, c, n, !1, null, '0632dacc', null); a.default = p.exports } }])
-// # sourceMappingURL=advert-space.e72fc61e.js.map

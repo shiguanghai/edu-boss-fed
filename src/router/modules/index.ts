@@ -3,6 +3,7 @@ import Layout from '@/layout/index.vue'
 import advertRoules from './advert'
 import courseRoules from './course'
 import rightsRoules from './rights'
+import ruserRoules from './user'
 
 // 路由配置规则
 const routes: Array<RouteConfig> = [
@@ -22,20 +23,13 @@ const routes: Array<RouteConfig> = [
         path: '', // 默认子路由
         name: 'home',
         component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue')
-      },
-      {
-        path: '/user',
-        name: 'user',
-        component: () => import(/* webpackChunkName: 'user' */ '@/views/user/index.vue'),
-        meta: {
-          title: '用户管理'
-        }
       }
     ]
   },
   advertRoules,
   courseRoules,
   rightsRoules,
+  ruserRoules,
   {
     path: '*',
     name: '404',

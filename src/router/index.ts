@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 import routes from './modules/index'
 
 Vue.use(VueRouter)
@@ -11,6 +13,7 @@ const router = new VueRouter({
 
 // 全局前置守卫：任何页面的访问都要经过这里
 router.beforeEach((to, from, next) => {
+  nprogress.start()
   // 处理面包屑: 获取当前的路由匹配记录
   // console.log('router.currentRoute.matched', router.currentRoute.matched)
   // to.matched 是一个数组（匹配到的路由记录）
@@ -31,6 +34,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next() // 确保一定要调用 next()
   }
+})
+
+router.afterEach(() => {
+  nprogress.done()
 })
 
 export default router

@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
     "moment": "^2.29.1",
+    "nprogress": "^0.2.0",
     "qs": "^6.10.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -22,6 +23,7 @@
     "wangeditor": "^4.0.5"
   },
   "devDependencies": {
+    "@types/nprogress": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",

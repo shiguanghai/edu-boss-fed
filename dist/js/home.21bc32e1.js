@@ -1,2 +1,0 @@
-(window.webpackJsonp = window.webpackJsonp || []).push([['home'], { '7abe': function (e, n, t) { 'use strict'; t.r(n); var a = function () { var e = this; var n = e.$createElement; var t = e._self._c || n; return t('div', { staticClass: 'home' }, [e._v('首页')]) }; var s = []; var o = t('2b0e'); var c = o.default.extend({ name: 'HomeIndex' }); var l = c; var u = t('2877'); var i = Object(u.a)(l, a, s, !1, null, '48872e5e', null); n.default = i.exports } }])
-// # sourceMappingURL=home.21bc32e1.js.map

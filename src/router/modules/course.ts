@@ -15,7 +15,7 @@ const routes: RouteConfig = {
       name: 'course',
       component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue'),
       meta: {
-        // title: '课程管理'
+        // title: '课程列表'
       }
     },
     {
