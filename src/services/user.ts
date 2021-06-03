@@ -43,3 +43,10 @@ export const forbidUser = (userId: string | number) => {
     }
   })
 }
+
+export const getUserPermissions = () => {
+  return request({
+    method: 'GET',
+    url: '/boss/permission/getUserPermissions'
+  })
+}

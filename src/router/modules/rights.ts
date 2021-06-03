@@ -7,7 +7,10 @@ const routes: RouteConfig = {
   component: Layout,
   meta: { // meta 默认就是一个空对象
     requiresAuth: true, // 访问权限。自定义数据
-    title: '权限管理'
+    title: '权限管理',
+    meta: {
+      menuId: '' // 标识
+    }
   },
   children: [
     {
@@ -16,7 +19,8 @@ const routes: RouteConfig = {
       component: () => import(/* webpackChunkName: 'role' */ '@/views/role/index.vue'),
       meta: {
         // requiresAuth: true
-        title: '角色管理'
+        title: '角色列表',
+        menuId: 'Role'
       }
     },
     {
@@ -24,7 +28,8 @@ const routes: RouteConfig = {
       name: 'menu',
       component: () => import(/* webpackChunkName: 'menu' */ '@/views/menu/index.vue'),
       meta: {
-        title: '菜单管理'
+        title: '菜单列表',
+        menuId: 'Menu'
       }
     },
     {
@@ -32,7 +37,8 @@ const routes: RouteConfig = {
       name: 'resource',
       component: () => import(/* webpackChunkName: 'resource' */ '@/views/resource/index.vue'),
       meta: {
-        title: '资源管理'
+        title: '资源列表',
+        menuId: 'Resource'
       }
     },
     {
@@ -40,7 +46,8 @@ const routes: RouteConfig = {
       name: 'menu-create',
       component: () => import(/* webpackChunkName: 'menu-create-edit' */ '@/views/menu/create.vue'),
       meta: {
-        title: '创建菜单'
+        title: '添加菜单',
+        menuId: 'AddMenu'
       }
     },
     {
@@ -48,7 +55,8 @@ const routes: RouteConfig = {
       name: 'menu-edit',
       component: () => import(/* webpackChunkName: 'menu-create-edit' */ '@/views/menu/edit.vue'),
       meta: {
-        title: '更新菜单'
+        title: '更新菜单',
+        menuId: 'UpdateMenu'
       }
     },
     {
@@ -56,7 +64,8 @@ const routes: RouteConfig = {
       name: 'alloc-menu',
       component: () => import(/* webpackChunkName: 'alloc-menu' */ '@/views/role/alloc-menu.vue'),
       meta: {
-        title: '分配菜单'
+        title: '分配菜单',
+        menuId: 'AllocMenu'
       },
       props: true // 将路由路径参数映射到组件的 props 数据中
     },
@@ -65,7 +74,8 @@ const routes: RouteConfig = {
       name: 'alloc-resource',
       component: () => import(/* webpackChunkName: 'alloc-menu' */ '@/views/role/alloc-resource.vue'),
       meta: {
-        title: '分配资源'
+        title: '分配资源',
+        menuId: 'AllocResource'
       },
       props: true // 将路由路径参数映射到组件的 props 数据中
     }

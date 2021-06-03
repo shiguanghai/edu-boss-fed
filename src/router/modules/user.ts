@@ -15,7 +15,8 @@ const routes: RouteConfig = {
       name: 'user-list',
       component: () => import(/* webpackChunkName: 'user' */ '@/views/user/index.vue'),
       meta: {
-        // title: '用户列表'
+        // title: '用户列表',
+        menuId: 'Users'
       }
     }
   ]

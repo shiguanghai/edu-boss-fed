@@ -22,7 +22,10 @@ const routes: Array<RouteConfig> = [
       {
         path: '', // 默认子路由
         name: 'home',
-        component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue')
+        component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue'),
+        meta: {
+          menuId: ''
+        }
       }
     ]
   },
@@ -34,6 +37,11 @@ const routes: Array<RouteConfig> = [
     path: '*',
     name: '404',
     component: () => import(/* webpackChunkName: '404' */ '@/views/error-page/404.vue')
+  },
+  {
+    path: '/not-permission',
+    name: 'not-permistion',
+    component: () => import(/* webpackChunkName: '403' */ '@/views/error-page/403.vue')
   }
 ]
 

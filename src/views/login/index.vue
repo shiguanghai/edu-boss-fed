@@ -24,6 +24,10 @@
           登录
         </el-button>
       </el-form-item>
+      <el-form-item>
+        <p>供测试权限控制：15321919571 | 111111</p>
+        <p>没有课程、广告管理权限</p>
+      </el-form-item>
     </el-form>
   </div>
 </template>
