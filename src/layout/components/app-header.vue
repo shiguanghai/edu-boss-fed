@@ -39,6 +39,7 @@ export default Vue.extend({
   },
   created () {
     this.loadUserInfo()
+    console.log('router.currentRoute.matched', this.$route.matched)
   },
   methods: {
     async loadUserInfo () {
